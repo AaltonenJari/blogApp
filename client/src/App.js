@@ -186,6 +186,7 @@ const App = () => {
                 : <Login setUser={setUser} />
             }
           />
+          <Route path="*" element={<div style={{ padding: '20px' }}><h1>404 - Page not found</h1></div>} />
         </Routes>
       </ErrorBoundary>
     </Container>
