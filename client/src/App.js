@@ -10,6 +10,7 @@ import {
 import Blog from './components/Blog'
 import BlogAdditionForm from './components/BlogAdditionForm'
 import { Button, Container, AppBar, Toolbar, Box, Typography } from '@mui/material'
+import ErrorBoundary from './ErrorBoundary'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -161,30 +162,32 @@ const App = () => {
 
       <Notification status={notificationStatus} message={notificationMessage} />
 
-      <Routes>
-        <Route
-          path="/blogs/:id"
-          element={
-            <Blog
-              blog={blog}
-              userid={user?.id}
-              increaseLikes={increaseLikesOf}
-              deleteBlog={deleteBlog}
-            />
-          }
-        />
-        <Route path="/" element={<BlogList blogList={blogs} />} />
-        <Route path="/create" element={user ? <BlogAdditionForm createBlog={addBlog} /> : <Navigate to="/login" />} />
+      <ErrorBoundary>
+        <Routes>
+          <Route
+            path="/blogs/:id"
+            element={
+              <Blog
+                blog={blog}
+                userid={user?.id}
+                increaseLikes={increaseLikesOf}
+                deleteBlog={deleteBlog}
+              />
+            }
+          />
+          <Route path="/" element={<BlogList blogList={blogs} />} />
+          <Route path="/create" element={user ? <BlogAdditionForm createBlog={addBlog} /> : <Navigate to="/login" />} />
 
-        <Route
-          path="/login"
-          element={
-            user
-              ? <Navigate to="/" />   // jos kirjautunut → pois login-sivulta
-              : <Login setUser={setUser} />
-          }
-        />
-      </Routes>
+          <Route
+            path="/login"
+            element={
+              user
+                ? <Navigate to="/" />   // jos kirjautunut → pois login-sivulta
+                : <Login setUser={setUser} />
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
     </Container>
   )
 }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 const BlogList = ({ blogList = [] }) => {
+  // throw new Error('simulated error') // highlight line
   return (
     <div>
       <h2>blogs</h2>
