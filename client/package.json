@@ -21,7 +21,7 @@
     "test": "vitest run",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "server": "cd ../blogilista && node index.js",
+    "server": "node ../server/index.js",
     "dev": "concurrently \"npm start\" \"npm run server\""
   },
   "eslintConfig": {
