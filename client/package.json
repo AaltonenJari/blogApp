@@ -2,7 +2,6 @@
   "name": "blogilista-frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3003",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -17,12 +16,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "npm start",
     "build": "react-scripts build",
     "test": "vitest run",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "server": "node ../server/index.js",
-    "dev": "concurrently \"npm start\" \"npm run server\""
+    "server": "node ../server/index.js"
   },
   "eslintConfig": {
     "extends": [
