@@ -5,7 +5,10 @@ const Blog = ({ blog, userid, increaseLikes, deleteBlog }) => {
   const navigate = useNavigate()
   const { id } = useParams()
 
-  if (!blog) return null
+  if (!blog) return (
+    <div style={{ padding: '20px' }}><h1>404 - Page not found</h1>
+    </div>
+  )
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {

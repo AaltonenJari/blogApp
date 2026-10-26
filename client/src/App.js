@@ -136,7 +136,7 @@ const App = () => {
           </Typography>
 
           <Box sx={{ ml: 'auto' }}>
-            <Button color="inherit" component={Link} to="/" sx={style}>
+            <Button color="inherit" component={Link} to="/blogs" sx={style}>
               Blogs
             </Button>
             <Button color="inherit" component={Link} to="/create" sx={style}>
@@ -176,6 +176,7 @@ const App = () => {
             }
           />
           <Route path="/" element={<BlogList blogList={blogs} />} />
+          <Route path="/blogs" element={<BlogList blogList={blogs} />} />
           <Route path="/create" element={user ? <BlogAdditionForm createBlog={addBlog} /> : <Navigate to="/login" />} />
 
           <Route
