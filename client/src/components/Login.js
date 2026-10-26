@@ -2,11 +2,15 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 import LoginForm from './LoginForm'
+import { useNotificationActions } from '../store'
 
 const Login = ({ setUser })  => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const { setNotificationMessage, setNotificationStatus } = useNotificationActions(state => ({
+    setNotificationMessage: state.setNotificationMessage,
+    setNotificationStatus: state.setNotificationStatus
+  }))
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -24,8 +28,10 @@ const Login = ({ setUser })  => {
     } catch {
       const notificationMessage = 'wrong username or password'
       setNotificationMessage(notificationMessage)
+      setNotificationStatus('error')
       setTimeout(() => {
         setNotificationMessage(null)
+        setNotificationStatus(null)
       }, 5000)
     }
   }
@@ -38,7 +44,6 @@ const Login = ({ setUser })  => {
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
         handleSubmit={handleLogin}
-        notificationMessage={notificationMessage}
       />
     </div>
   )

@@ -11,12 +11,15 @@ import Blog from './components/Blog'
 import BlogAdditionForm from './components/BlogAdditionForm'
 import { Button, Container, AppBar, Toolbar, Box, Typography } from '@mui/material'
 import ErrorBoundary from './ErrorBoundary'
+import { useNotificationActions } from './store'
 
 const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [notificationStatus, setNotificationStatus] = useState(null)
+  const { setNotificationMessage, setNotificationStatus } = useNotificationActions(state => ({
+    setNotificationMessage: state.setNotificationMessage,
+    setNotificationStatus: state.setNotificationStatus
+  }))
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -160,7 +163,7 @@ const App = () => {
         </Toolbar>
       </AppBar>
 
-      <Notification status={notificationStatus} message={notificationMessage} />
+      <Notification />
 
       <ErrorBoundary>
         <Routes>

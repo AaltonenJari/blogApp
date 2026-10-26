@@ -1,21 +1,27 @@
+import { useNotificationMessage } from '../store'
+import { useNotificationStatus } from '../store'
+
 import { Alert } from '@mui/material'
 
-const Notification = ({ status, message }) => {
-  if (!message) {
+const Notification = () => {
+  const notificationMessage = useNotificationMessage()
+  const notificationStatus = useNotificationStatus()
+
+  if (!notificationMessage) {
     return null
   }
 
-  if (status === 'error') {
+  if (notificationStatus === 'error') {
     return (
       <Alert severity="error">
-        {message}
+        {notificationMessage}
       </Alert>
     )
   }
 
   return (
     <Alert severity="success">
-      {message}
+      {notificationMessage}
     </Alert>
   )
 }
