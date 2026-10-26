@@ -1,20 +1,25 @@
 import { Link } from 'react-router-dom'
 
 const BlogList = ({ blogList = [] }) => {
-  // throw new Error('simulated error') // highlight line
-  return (
-    <div>
-      <h2>blogs</h2>
+  const testing = 'testing'
 
-      <ul>
-        {blogList.map(blog => (
-          <li key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  if (testing === 'no') {
+    throw new Error('simulated error') // highlight line
+  }
+  else {
+    return (
+      <div>
+        <h2>blogs</h2>
+
+        <ul>
+          {blogList.map(blog => (
+            <li key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 }
-
 export default BlogList
