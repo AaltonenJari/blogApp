@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useBlogs } from '../store'
 
-const BlogList = ({ blogList = [] }) => {
+const BlogList = () => {
   const testing = 'testing'
+  const blogs = useBlogs()
 
   if (testing === 'no') {
     throw new Error('simulated error') // highlight line
@@ -12,7 +14,7 @@ const BlogList = ({ blogList = [] }) => {
         <h2>blogs</h2>
 
         <ul>
-          {blogList.map(blog => (
+          {blogs.map(blog => (
             <li key={blog.id}>
               <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             </li>

@@ -159,8 +159,8 @@ const App = () => {
               />
             }
           />
-          <Route path="/" element={<BlogList blogList={blogs} />} />
-          <Route path="/blogs" element={<BlogList blogList={blogs} />} />
+          <Route path="/" element={<BlogList />} />
+          <Route path="/blogs" element={<BlogList />} />
           <Route path="/create" element={user ? <BlogAdditionForm /> : <Navigate to="/login" />} />
 
           <Route
