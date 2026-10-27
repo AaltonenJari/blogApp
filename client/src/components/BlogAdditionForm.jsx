@@ -1,22 +1,51 @@
 import { useState } from 'react'
 import { Button, TextField } from '@mui/material'
+import { useBlogActions } from '../store'
+import { useNotificationActions } from '../store'
+import { useNavigate } from 'react-router-dom'
 
-const BlogAdditionForm = ({ createBlog }) => {
+
+const BlogAdditionForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const { add } = useBlogActions()
+  const { setNotificationMessage, setNotificationStatus } = useNotificationActions(state => ({
+    setNotificationMessage: state.setNotificationMessage,
+    setNotificationStatus: state.setNotificationStatus
+  }))
+
+  const navigate = useNavigate()
+
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
+    add({
       title,
       author,
       url
+    }).then((returnedBlog) => {
+      const notificationMessage = `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
+      setNotificationMessage(notificationMessage)
+      setNotificationStatus('ok')
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setNotificationStatus(null)
+      }, 5000)
+      navigate('/')
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    },
+    (error) => {
+      const notificationMessage = `${error.message}`
+      setNotificationMessage(notificationMessage)
+      setNotificationStatus('error')
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setNotificationStatus(null)
+      }, 5000)
     })
-
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
 
   return (

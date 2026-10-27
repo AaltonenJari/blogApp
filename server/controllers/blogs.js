@@ -67,7 +67,7 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
         likes,
         user: user.id
       },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     )
     .populate('user', { name: 1, username: 1 })
 

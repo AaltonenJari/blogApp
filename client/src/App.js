@@ -12,14 +12,21 @@ import BlogAdditionForm from './components/BlogAdditionForm'
 import { Button, Container, AppBar, Toolbar, Box, Typography } from '@mui/material'
 import ErrorBoundary from './ErrorBoundary'
 import { useNotificationActions } from './store'
+import { useBlogActions } from './store'
+import { useBlogs } from './store'
+import { useSetBlogs } from './store'
 
 const App = () => {
   const [user, setUser] = useState(null)
-  const [blogs, setBlogs] = useState([])
+  const blogs = useBlogs()
+  const setBlogs = useSetBlogs()
+
   const { setNotificationMessage, setNotificationStatus } = useNotificationActions(state => ({
     setNotificationMessage: state.setNotificationMessage,
     setNotificationStatus: state.setNotificationStatus
   }))
+  const { initialize } = useBlogActions()
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -41,10 +48,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    initialize()
+  }, [initialize])
+
 
   const increaseLikesOf = (id) => {
     const blog = blogs.find(b => b.id === id)
@@ -72,31 +78,6 @@ const App = () => {
         }, 5000)
       })
   }
-
-  const addBlog = (blogObject) => {
-    blogService.create(blogObject).then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-
-      const notificationMessage = `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
-      setNotificationMessage(notificationMessage)
-      setNotificationStatus('ok')
-      setTimeout(() => {
-        setNotificationMessage(null)
-        setNotificationStatus(null)
-      }, 5000)
-    })
-      .catch(error => {
-        const notificationMessage = `error creating blog: ${error.response.data.error}`
-        setNotificationMessage(notificationMessage)
-        setNotificationStatus('error')
-        setTimeout(() => {
-          setNotificationMessage(null)
-          setNotificationStatus(null)
-        }, 5000)
-      })
-    navigate('/')
-  }
-
 
   const deleteBlog = (id) => {
     blogService.remove(id)
@@ -180,7 +161,7 @@ const App = () => {
           />
           <Route path="/" element={<BlogList blogList={blogs} />} />
           <Route path="/blogs" element={<BlogList blogList={blogs} />} />
-          <Route path="/create" element={user ? <BlogAdditionForm createBlog={addBlog} /> : <Navigate to="/login" />} />
+          <Route path="/create" element={user ? <BlogAdditionForm /> : <Navigate to="/login" />} />
 
           <Route
             path="/login"
