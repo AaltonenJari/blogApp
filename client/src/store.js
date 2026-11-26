@@ -22,6 +22,29 @@ const useBlogStore = create((set) => ({
       } catch (error) {
         throw new Error(`Error creating blog: ${error.response.data.error}`)
       }
+    },
+    update: async (id, updatedBlog) => {
+      try {
+        const returnedBlog = await blogService.update(id, updatedBlog)
+        set((state) => ({
+          blogs: state.blogs.map((blog) =>
+            blog.id !== id ? blog : returnedBlog
+          ),
+        }))
+        return returnedBlog
+      } catch (error) {
+        throw new Error(`Error updating blog: ${error.response.data.error}`)
+      }
+    },
+    delete: async (id) => {
+      try {
+        await blogService.remove(id)
+        set((state) => ({
+          blogs: state.blogs.filter((blog) => blog.id !== id),
+        }))
+      } catch (error) {
+        throw new Error(`Error deleting blog: ${error.response.data.error}`)
+      }
     }
   },
 

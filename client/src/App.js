@@ -5,29 +5,19 @@ import BlogList from './components/BlogList'
 import Notification from './components/notification'
 import {
   Routes, Route, Link, Navigate,
-  useMatch, useNavigate
+  useMatch
 } from 'react-router-dom'
 import Blog from './components/Blog'
 import BlogAdditionForm from './components/BlogAdditionForm'
 import { Button, Container, AppBar, Toolbar, Box, Typography } from '@mui/material'
 import ErrorBoundary from './ErrorBoundary'
-import { useNotificationActions } from './store'
 import { useBlogActions } from './store'
 import { useBlogs } from './store'
-import { useSetBlogs } from './store'
 
 const App = () => {
   const [user, setUser] = useState(null)
   const blogs = useBlogs()
-  const setBlogs = useSetBlogs()
-
-  const { setNotificationMessage, setNotificationStatus } = useNotificationActions(state => ({
-    setNotificationMessage: state.setNotificationMessage,
-    setNotificationStatus: state.setNotificationStatus
-  }))
   const { initialize } = useBlogActions()
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -50,59 +40,6 @@ const App = () => {
   useEffect(() => {
     initialize()
   }, [initialize])
-
-
-  const increaseLikesOf = (id) => {
-    const blog = blogs.find(b => b.id === id)
-    const updatedBlog = { ...blog, likes: blog.likes + 1 }
-
-    blogService.update(id, updatedBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.map(n => n.id !== id ? n : returnedBlog))
-
-        const notificationMessage = `liked blog ${returnedBlog.title} by ${returnedBlog.author}`
-        setNotificationMessage(notificationMessage)
-        setNotificationStatus('ok')
-        setTimeout(() => {
-          setNotificationMessage(null)
-          setNotificationStatus(null)
-        }, 5000)
-      })
-      .catch(error => {
-        const notificationMessage = `error updating likes: ${error.response && error.response.data && error.response.data.error ? error.response.data.error : error.message}`
-        setNotificationMessage(notificationMessage)
-        setNotificationStatus('error')
-        setTimeout(() => {
-          setNotificationMessage(null)
-          setNotificationStatus(null)
-        }, 5000)
-      })
-  }
-
-  const deleteBlog = (id) => {
-    blogService.remove(id)
-      .then(() => {
-        setBlogs(blogs.filter(b => b.id !== id))
-
-        const notificationMessage = 'blog deleted'
-        setNotificationMessage(notificationMessage)
-        setNotificationStatus('ok')
-        setTimeout(() => {
-          setNotificationMessage(null)
-          setNotificationStatus(null)
-        }, 5000)
-      })
-      .catch(error => {
-        const notificationMessage = `error deleting blog: ${error.response && error.response.data && error.response.data.error ? error.response.data.error : error.message}`
-        setNotificationMessage(notificationMessage)
-        setNotificationStatus('error')
-        setTimeout(() => {
-          setNotificationMessage(null)
-          setNotificationStatus(null)
-        }, 5000)
-      })
-    navigate('/')
-  }
 
   const match = useMatch('/blogs/:id')
   const blog = match
@@ -154,8 +91,6 @@ const App = () => {
               <Blog
                 blog={blog}
                 userid={user?.id}
-                increaseLikes={increaseLikesOf}
-                deleteBlog={deleteBlog}
               />
             }
           />
