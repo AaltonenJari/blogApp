@@ -1,6 +1,29 @@
 import { create } from 'zustand'
 import blogService from './services/blogs'
 
+const useUserStore = create((set) => ({
+  user: [],
+  setUser: (user) => set({ user }),
+
+  actions: {
+    getSignedInUser: async () => {
+      const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        set({ user })
+        blogService.setToken(user.token)
+      }
+    }
+  }
+}))
+
+export const setUser = (user) => {
+  useUserStore.setState({ user })
+}
+export const useUser = () => useUserStore((state) => state.user)
+export const useSetUser = () => useUserStore((state) => state.setUser)
+export const useUserActions = () => useUserStore((state) => state.actions)
+
 const useBlogStore = create((set) => ({
   blogs: [],
   setBlogs: (blogs) => set({ blogs }),

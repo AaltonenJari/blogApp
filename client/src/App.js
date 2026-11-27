@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
-import blogService from './services/blogs'
+import { useEffect } from 'react'
 import Login from './components/Login'
 import BlogList from './components/BlogList'
 import Notification from './components/notification'
 import {
   Routes, Route, Link, Navigate,
-  useMatch
+  useMatch, useNavigate
 } from 'react-router-dom'
 import Blog from './components/Blog'
 import BlogAdditionForm from './components/BlogAdditionForm'
@@ -13,24 +12,24 @@ import { Button, Container, AppBar, Toolbar, Box, Typography } from '@mui/materi
 import ErrorBoundary from './ErrorBoundary'
 import { useBlogActions } from './store'
 import { useBlogs } from './store'
+import { useUserActions } from './store'
+import { useUser, setUser } from './store'
 
 const App = () => {
-  const [user, setUser] = useState(null)
+  const navigate = useNavigate()
   const blogs = useBlogs()
   const { initialize } = useBlogActions()
+  const user = useUser()
+  const { getSignedInUser } = useUserActions()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
+    getSignedInUser()
+  }, [getSignedInUser])
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteappUser')
     setUser(null)
+    navigate('/')
   }
 
   const padding = {
